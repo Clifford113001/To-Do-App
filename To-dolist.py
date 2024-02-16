@@ -18,7 +18,11 @@ frame01.grid(row=0, column=1)
 frame10.grid(row=1, column=0)
 frame11.grid(row=1, column=1)
 
-tasks = {}
+tasks = {} #This is where new tasks go while program is running and
+# before they are shelved
+# I believe objects are being stored here because I ran a print function
+# its length after adding a few.
+
 tasklist = shelve.open("tasklist")
 
 newTaskLabel = tk.Label(text="Enter New Task:", master=frame01)
@@ -28,6 +32,10 @@ currentTasksLabel.pack(side=tk.TOP)
 
 
 def loadOnOpen():
+    """recalls shelf file when the program is opened and
+ creates a checkbutton for each unchecked button. If the
+ close function worked properly, the only checks in the file should
+ be unchecked """
     tasklist = shelve.open("tasklist")
     for task in tasklist.keys():
         var = tk.IntVar()
@@ -39,6 +47,8 @@ def loadOnOpen():
 
 
 def newTaskFunction(event):
+    """ creates a checkbutton when user types new task
+and presses <enter> (bound to <return?>"""
     newTaskName = newTaskEntry.get()
     var = tk.IntVar()
     newTaskBox = tk.Checkbutton(
@@ -47,10 +57,11 @@ def newTaskFunction(event):
     newTaskBox.pack(side=tk.TOP)
     tasks[newTaskBox] = var
     newTaskEntry.delete(0, tk.END)
-    newTaskEntry.bind("<Return>", printTask)
 
 
 def checkoffs():
+    """ destroys checkbutton objects after they've
+been checked off"""
     # Could this be simplified since only one box will ever
     # be checked at a time?
     destroyList = []
@@ -63,6 +74,8 @@ def checkoffs():
 
 
 def finalSave():
+    """ Supposed to save remaining boxes (unchecked), when
+user X's out of window """
     tasklist = shelve.open("tasklist")
     for key, value in tasks.items():
         taskName = key.cget('text')
