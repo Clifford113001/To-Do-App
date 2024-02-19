@@ -79,7 +79,7 @@ user X's out of window """
     tasklist = shelve.open("tasklist")
     for key, value in tasks.items():
         taskName = key.cget('text')
-        tasklist[taskName] = var.get()
+        tasklist[taskName] = value.get()
 
     tasklist.close()
 
